@@ -1,0 +1,10 @@
+[Unit]
+ Description=Charging Station Control
+ After=multi-user.target
+
+ [Service]
+ Type=idle
+ ExecStart=/home/pi/enableCharging.py
+
+ [Install]
+ WantedBy=multi-user.target

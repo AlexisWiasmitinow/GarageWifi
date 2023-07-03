@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from counter import *
 import calendar
 
-hostName = "192.168.1.170"
+hostNameLan = "192.168.1.170"
 port = 80
 
 serverVariables = {}
@@ -65,7 +65,7 @@ class MyServer(BaseHTTPRequestHandler):
 		startSSR = datetime.fromtimestamp(serverVariables["startSSR"])
 		startSSRstring = startSSR.strftime('%Y-%m-%d %H:%M:%S')
 		if serverVariables["ssrOn"]:
-			statusText = f"We have currently the socket enabled, it started at{startSSRstring}."
+			statusText = f"We have currently the socket enabled, it started at: {startSSRstring}"
 		else:
 			statusText = f"We have currently the charger enabled."
 		self.send_response(200)
@@ -79,8 +79,8 @@ class MyServer(BaseHTTPRequestHandler):
 		self.wfile.write(bytes("</body></html>", "utf-8"))
 
 def startServer():
-	webServer = HTTPServer((hostName, port), MyServer)
-	webServer.serve_forever()
+	webServerLan = HTTPServer((hostNameLan, port), MyServer)
+	webServerLan.serve_forever()
 
 def runServer():
 	serverThread = threading.Thread(target=startServer)

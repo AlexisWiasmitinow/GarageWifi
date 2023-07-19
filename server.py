@@ -50,14 +50,14 @@ class MyServer(BaseHTTPRequestHandler):
 				chargerLowSum += chargerLow
 			elif lastMonth > 0:
 				monthString = calendar.month_name[lastMonth]
-				energyValues += f"Month: {monthString}, Socket High: {kWh(ssrHighSum, True, True)}, Socket Low: {kWh(ssrLowSum, False, True)}, Charger High: {kWh(chargerHighSum, True, False)}, Charger Low: {kWh(chargerLowSum, False, False)} <br> "
+				energyValues += f"Month: {monthString}, Socket High: {kWh(ssrHighSum, True, False)}, Socket Low: {kWh(ssrLowSum, False, False)}, Charger High: {kWh(chargerHighSum, True, True)}, Charger Low: {kWh(chargerLowSum, False, True)} <br> "
 				ssrHighSum = ssrHigh
 				ssrLowSum = ssrLow
 				chargerHighSum = chargerHighSum
 				chargerLowSum = chargerLow
 			if i == len(lines) - 1:
 				monthString = calendar.month_name[month]
-				energyValues += f"Month: {monthString}, Socket High: {kWh(ssrHighSum, True, True)}, Socket Low: {kWh(ssrLowSum, False, True)}, Charger High: {kWh(chargerHighSum, True, False)}, Charger Low: {kWh(chargerLowSum, False, False)} <br> "
+				energyValues += f"Month: {monthString}, Socket High: {kWh(ssrHighSum, True, False)}, Socket Low: {kWh(ssrLowSum, False, False)}, Charger High: {kWh(chargerHighSum, True, True)}, Charger Low: {kWh(chargerLowSum, False, True)} <br> "
 			lastMonth = month
 
 		if debug:

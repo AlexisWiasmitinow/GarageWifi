@@ -12,18 +12,22 @@ serverVariables["startSSR"] = 0
 def kWh(pulses, high, internal):
 	kWh = pulses/400.0
 	price = 0
+	cost = 0
 	if high:
 		if internal:
-			price = highTariff
+			cost = highTariff
 		else:
-			price = highTariff + tariffMarkup
+			cost = highTariff
+			price = cost + tariffMarkup
 	else:
 		if internal:
-			price = lowTariff
+			cost = lowTariff
 		else:
-			price = lowTariff + tariffMarkup
-	CHF = round(kWh * price, 2)
-	return f"{kWh} kWh / CHF {CHF}"
+			cost = lowTariff
+			price = cost + tariffMarkup
+	CHF_price = round(kWh * price, 2)
+	CHF_cost = round(kWh * cost, 2)
+	return f"{kWh} kWh / CHF {CHF_price} ({CHF_cost})"
 
 class MyServer(BaseHTTPRequestHandler):
 	def do_GET(self):

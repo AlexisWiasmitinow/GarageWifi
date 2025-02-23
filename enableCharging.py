@@ -52,11 +52,11 @@ def main():
         serverVariables["startSSR"] = counterStatus["startSSR"]
         counterStatus["highTariff"] = checkHighTariff()
         serverVariables["highTariff"] = counterStatus["highTariff"]
-        overrideFile = open(overrideFileName, "r")
+        """overrideFile = open(overrideFileName, "r")
         overrideText = overrideFile.read()
         overrideFile.close()
-        override = bool(int(overrideText))
-        serverVariables["override"] = override
+        override = bool(int(overrideText))"""
+        # serverVariables["override"] = override
         if time.time() > counterStatus["startSSR"] + ssrChargeTime:
             counterStatus["ssrOn"] = False
         if counterStatus["ssrOn"]:
@@ -72,7 +72,7 @@ def main():
             canCharge = False
             for address in outputString:
                 if address == validAddress:
-                    if override:
+                    if serverVariables["override"]:
                         canCharge = True
                     else:
                         canCharge = not counterStatus["highTariff"]

@@ -35,6 +35,12 @@ def kWh(pulses, high, internal):
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
+        if self.path == "/favicon.ico" or self.path == "/charger.png":
+            self.serve_favicon()
+            return
+        if self.path == "/override?":
+            serverVariables["override"] = not serverVariables["override"]
+            print("override set to", serverVariables["override"])
         with open(energyLogFile, "r") as file:
             lines = file.readlines()
         lastMonth = 0
@@ -82,12 +88,35 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write(bytes("<html><head><title>Electricity Meter</title></head>", "utf-8"))
-        self.wfile.write(bytes("<body>", "utf-8"))
-        self.wfile.write(bytes("<p>%s<br></p>" % statusText, "utf-8"))
-        self.wfile.write(bytes("<p>We have the following Electricity counts:</p>", "utf-8"))
-        self.wfile.write(bytes("<p>Energy Consumptions:<br> %s</p>" % energyValues, "utf-8"))
-        self.wfile.write(bytes("</body></html>", "utf-8"))
+        html_content = f"""
+        <html>
+        <head>
+        <title>Electricity Meter</title>
+        <link rel="icon" href="/charger.png" type="image/png">
+        </head>
+        <body>
+            <h1>Electricity Meter Status</h1>
+            <p>{statusText}</p>
+            <form action="/override" method="get">
+                <input type="submit" value="{'Disable' if serverVariables['override'] else 'Enable'} Override">
+            </form>
+            <h2>Energy Consumptions:</h2>
+            <p>{energyValues}</p>
+        </body>
+        </html>
+        """
+        self.wfile.write(bytes(html_content, "utf-8"))
+
+    def serve_favicon(self):
+        try:
+            with open("/home/pi/charger.png", "rb") as icon:
+                self.send_response(200)
+                self.send_header("Content-type", "image/x-icon")
+                self.end_headers()
+                self.wfile.write(icon.read())
+        except FileNotFoundError:
+            self.send_response(404)
+            self.end_headers()
 
 
 def startServer():
